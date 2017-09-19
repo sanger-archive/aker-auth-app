@@ -1,0 +1,15 @@
+development:
+  set_service: http://localhost:3001
+  materials_service: materials.service.com
+
+staging:
+  set_service: http://localhost:3001
+  materials_service: materials.service.com
+
+test:
+  set_service: http://localhost:3001
+  materials_service: materials.service.com
+
+production:
+  set_service: http://localhost:3001
+  materials_service: materials.service.com

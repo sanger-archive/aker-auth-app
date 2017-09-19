@@ -25,10 +25,18 @@ gem 'jbuilder', '~> 2.5'
 # Use devise with LDAP for authentication
 gem 'devise'
 gem 'devise_ldap_authenticatable'
+gem 'net-ldap'
+
+# JWTs to send on to the forward server
+gem 'jwt'
 
 # Use Bootstrap for styling
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'bootstrap_form'
+
+gem 'launchy'
+
+gem 'rack-proxy', '~> 0.6.2', require: true
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

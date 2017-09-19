@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   devise_scope :user do
-    root to: 'users/sessions#new'
+    get 'login', to: 'users/sessions#new'
+    get 'logout', to: 'users/sessions#destroy'
+    get '/', to: 'users/sessions#default'
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions' }

@@ -4,7 +4,25 @@ class ApplicationController < ActionController::Base
   end
   protect_from_forgery with: :exception
 
-  def after_sign_in_path_for(resource)
-
+  helper_method :redirect_url
+  def redirect_url
+    if params[:redirect_url].present?
+      # User is already signed in
+      params[:redirect_url]
+    elsif params.dig(:user, :redirect_to).present?
+      # User has just signed in
+      params[:user][:redirect_to]
+    else
+      nil
+    end
   end
+
+  def after_sign_in_path_for(resource)
+    if redirect_url.present?
+      redirect_url
+    else
+      "/"
+    end
+  end
+
 end

@@ -1,0 +1,20 @@
+<div class="container" id="content">
+  <h1>Aker</h1>
+
+  <% if notice %>
+    <p class="alert alert-info"><%= notice %></p>
+  <% elsif alert %>
+    <p class="alert alert-danger"><%= alert %></p>
+  <% end %>
+
+  <p>
+    <% if user_signed_in? %>
+    Signed in as <%= current_user.email %> <br>
+    <a href="/logout"><button class="btn btn-danger">Log out</button></a>
+    <% else %>
+    Not signed in.<br>
+    <a href="/login"><button class="btn btn-info">Log in</button></a>
+    <a href="/login?redirect_url=http://www.google.jp"><button class="btn btn-info">Log in with redirect</button></a>
+    <% end %>
+  </p>
+</div>

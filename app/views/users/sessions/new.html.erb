@@ -2,7 +2,7 @@
   <h2>Aker Log in</h2>
 
   <% if notice %>
-    <p class="alert alter-warning"><%= notice %></p>
+    <p class="alert alert-info"><%= notice %></p>
   <% elsif alert %>
     <p class="alert alert-danger"><%= alert %></p>
   <% end %>
@@ -22,7 +22,7 @@
       </div>
     <% end -%>
 
-    <%= f.hidden_field :redirect_to, value: 'http://bing.com' %>
+    <%= f.hidden_field :redirect_to, value: redirect_url %>
 
     <%= f.submit "Log in", class: "btn btn-primary" %>
   <% end %>

@@ -2,4 +2,20 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :ldap_authenticatable, :rememberable
+
+  attr_accessor :groups
+
+  def groups
+    @groups ||= fetch_groups
+  end
+
+private
+
+  def fetch_groups
+    name = self.email
+    DeviseLdapAuthenticatable::Logger.send("Getting groups for #{name}")
+    connection = Devise::LDAP::Adapter.ldap_connect(name)
+    filter = Net::LDAP::Filter.eq("member", connection.dn)
+    connection.ldap.search(filter: filter, base: Rails.application.config.ldap["group_base"]).collect(&:cn).flatten.push('world')
+  end
 end
