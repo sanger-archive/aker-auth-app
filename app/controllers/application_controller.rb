@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if redirect_url.present?
+      # Suppress alert and notice flashes
+      alert = nil
+      notice = nil
+      
       redirect_url
     else
       "/"
