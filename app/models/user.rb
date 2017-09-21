@@ -12,10 +12,13 @@ class User < ApplicationRecord
 private
 
   def fetch_groups
-    name = self.email
-    DeviseLdapAuthenticatable::Logger.send("Getting groups for #{name}")
-    connection = Devise::LDAP::Adapter.ldap_connect(name)
-    filter = Net::LDAP::Filter.eq("member", connection.dn)
-    connection.ldap.search(filter: filter, base: Rails.application.config.ldap["group_base"]).collect(&:cn).flatten.push('world')
+    # Cache groups to prevent unecessary LDAP requests
+    Rails.cache.fetch("#{cache_key}/groups", expires_in: 12.hours) do
+      name = self.email
+      DeviseLdapAuthenticatable::Logger.send("Getting groups for #{name}")
+      connection = Devise::LDAP::Adapter.ldap_connect(name)
+      filter = Net::LDAP::Filter.eq("member", connection.dn)
+      connection.ldap.search(filter: filter, base: Rails.application.config.ldap["group_base"]).collect(&:cn).flatten.push('world')
+    end
   end
 end
