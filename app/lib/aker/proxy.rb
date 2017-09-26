@@ -8,6 +8,12 @@ module Aker
         test_path(path).match(request.path) do |m|
           uri = URI.parse(forward_host)
           set_env(env, uri, m.captures.first)
+
+          # Super make sure Squid doesn't interfere
+          ENV['HTTP_PROXY'] = nil
+          ENV['http_proxy'] = nil
+          ENV['https_proxy'] = nil
+
           return super(env)
         end
       end

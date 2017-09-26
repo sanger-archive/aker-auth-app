@@ -54,7 +54,7 @@ RSpec.describe User, type: :feature do
     context "while logged in" do
       before :each do
         sign_in @user
-        visit "/logout"
+        page.driver.submit :delete, logout_path, {}
       end
 
       it "redirects to the login page" do
