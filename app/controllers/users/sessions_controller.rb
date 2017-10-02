@@ -7,9 +7,12 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    if params.dig(:user, :email).present? && (params[:user][:email].exclude? "@")
+      params[:user][:email] << "@sanger.ac.uk"
+    end
+    super
+  end
 
   # DELETE /resource/sign_out
   # def destroy
