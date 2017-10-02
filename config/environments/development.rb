@@ -55,7 +55,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.fake_ldap = false
+  config.fake_ldap = true
 
 
   config.x.jwt = {
