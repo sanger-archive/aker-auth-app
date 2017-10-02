@@ -10,7 +10,6 @@ class Users::SessionsController < Devise::SessionsController
   def create
     if params.dig(:user, :email).present? && (params[:user][:email].exclude? "@")
       params[:user][:email] << "@sanger.ac.uk"
-      puts params[:user][:email]
     end
     super
   end
