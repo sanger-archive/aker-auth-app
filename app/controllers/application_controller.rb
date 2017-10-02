@@ -22,10 +22,10 @@ class ApplicationController < ActionController::Base
       # Suppress alert and notice flashes
       alert = nil
       notice = nil
-      
+
       redirect_url
     else
-      "/"
+      "/dashboard"
     end
   end
 
