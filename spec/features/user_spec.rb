@@ -24,7 +24,7 @@ RSpec.describe User, type: :feature do
       it "redirects to the default URL" do
         visit "/login"
         submit_form
-        expect(current_path).to eq("/")
+        expect(current_path).to eq("/dashboard")
       end
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe User, type: :feature do
         visit "/login"
         submit_form
         visit "/login"
-        expect(current_path).to eq("/")
+        expect(current_path).to eq("/dashboard")
       end
     end
 
