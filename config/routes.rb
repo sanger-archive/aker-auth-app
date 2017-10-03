@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'login', to: 'users/sessions#new'
     delete 'logout', to: 'users/sessions#destroy'
+    post 'logout', to: 'users/sessions#destroy'
     get '/', to: 'users/sessions#default'
   end
 

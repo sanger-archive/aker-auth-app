@@ -36,6 +36,8 @@ gem 'bootstrap_form'
 
 gem 'launchy'
 
+gem 'jquery-rails'
+
 gem 'rack-proxy', '~> 0.6.2', require: true
 
 group :development, :test do
