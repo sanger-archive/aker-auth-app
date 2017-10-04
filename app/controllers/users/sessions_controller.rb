@@ -12,14 +12,29 @@ class Users::SessionsController < Devise::SessionsController
       params[:user][:email] << "@sanger.ac.uk"
     end
     super
+    set_jwt_cookie({"email": params[:user][:email]})
   end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    current_user.update(jti: SecureRandom.uuid)
+    super
+    cookies.delete :aker_user
+  end
 
   def default
+  end
+
+  private
+
+  def set_jwt_cookie(auth_hash)
+    secret_key = Rails.application.config.jwt_secret_key
+    iat = Time.now.to_i
+    jti = current_user[:jti]
+    exp = Time.now.to_i + Rails.application.config.jwt_exp_time
+    nbf = Time.now.to_i - Rails.application.config.jwt_nbf_time
+    payload = { data: auth_hash, exp: exp, nbf: nbf, iat: iat, jti: jti }
+    cookies[:aker_user] = JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
   end
 
   protected

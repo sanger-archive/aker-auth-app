@@ -55,14 +55,12 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.fake_ldap = true
+  config.fake_ldap = false
 
+  config.jwt_exp_time = 3600
+  config.jwt_nbf_time = 1 * 60
 
-  config.x.jwt = {
-    secret_key: "jumanji",
-    exp_time: 2 * 60,
-    nbf_time: 1 * 60
-  }
+  config.jwt_secret_key = 'development'
 
   config.middleware.insert_after(Warden::Manager, Aker::Proxy, {ssl_verify_none: true})
 end
