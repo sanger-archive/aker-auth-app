@@ -11,17 +11,20 @@
     <% if user_signed_in? %>
       Signed in as <%= current_user.email %> <br>
       <%= button_to "Log out", "/logout", method: 'DELETE', class: "btn btn-danger" %>
+      <br>
       <% begin %>
+        <h4>JWT from Cookie</h4>
         <% payload, header = JWT.decode cookies[:aker_user], Rails.configuration.jwt_secret_key, true, { algorithm: 'HS256'} %>
         <%= payload %><br>
-        <%= Rails.configuration.jwt_exp_time %>
-        <%= (Rails.configuration.jwt_exp_time - (Time.now.to_i - payload['iat'].to_i)).to_s + " seconds until session expires"%>
+        <h5>JWT Lfetime <small>(seconds)</small></h5>
+        <%= "Lifetime: " + Rails.configuration.jwt_exp_time.to_s %><br>
+        <%= "Remaining: " + (Rails.configuration.jwt_exp_time - (Time.now.to_i - payload['iat'].to_i)).to_s %>
       <% rescue JWT::VerificationError => e %>
         JWT Verification failed, you hacker
       <% rescue JWT::ExpiredSignature => e %>
         JWT Signature has expired
       <% end %>
-
+      
     <% else %>
       Not signed in<br>
       <a href="/login"><button class="btn btn-info">Log in</button></a>
