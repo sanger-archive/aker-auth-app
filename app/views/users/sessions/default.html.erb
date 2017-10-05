@@ -13,22 +13,25 @@
       <%= button_to "Log out", "/logout", method: 'DELETE', class: "btn btn-danger" %>
       <br>
       <% begin %>
-        <h4>JWT from Cookie</h4>
+        <h5>JWT from Shared Cookie <small>aker_user</small></h5>
         <% payload, header = JWT.decode cookies[:aker_user], Rails.configuration.jwt_secret_key, true, { algorithm: 'HS256'} %>
         <%= payload %><br>
         <h5>JWT Lfetime <small>(seconds)</small></h5>
         <%= "Lifetime: " + Rails.configuration.jwt_exp_time.to_s %><br>
         <%= "Remaining: " + (Rails.configuration.jwt_exp_time - (Time.now.to_i - payload['iat'].to_i)).to_s %>
       <% rescue JWT::VerificationError => e %>
-        JWT Verification failed, you hacker
+        JWT Verification failed
       <% rescue JWT::ExpiredSignature => e %>
         JWT Signature has expired
       <% end %>
-      
+      <h5>Auth Service Cookie <small>aker_auth_session</small></h5>
+      <%= cookies[:aker_auth_session] %>
     <% else %>
       Not signed in<br>
       <a href="/login"><button class="btn btn-info">Log in</button></a>
       <a href="/login?redirect_url=http://www.google.jp"><button class="btn btn-info">Log in with redirect</button></a>
     <% end %>
+    <h5>Rails Cookie <small>_aker_auth_service_session</small></h5>
+    <%= cookies.encrypted[:_aker_auth_service_session] %>
   </p>
 </div>
