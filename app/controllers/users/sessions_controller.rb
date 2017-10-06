@@ -35,7 +35,7 @@ class Users::SessionsController < Devise::SessionsController
     # session doesn't seem to exist here, which is obviously causing problems
 
     if true
-      jwt = prepare_jwt_cookie({email: data['email'], groups: data['groups']})
+      jwt = prepare_jwt_cookie({email: data['email'], groups: User.find_by(email: data['email']).groups})
       response = JWT.encode jwt, @@secret_key, 'HS256'
       render json: response, status: 200
     else
@@ -58,7 +58,6 @@ class Users::SessionsController < Devise::SessionsController
 
   def set_session_cookie
     session[:email] = current_user.email
-    session[:groups] = current_user.groups
   end
 
   protected
