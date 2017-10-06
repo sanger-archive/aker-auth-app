@@ -30,6 +30,9 @@ gem 'net-ldap'
 # JWTs to send on to the forward server
 gem 'jwt'
 
+# Store session details in database
+gem 'activerecord-session_store'
+
 # Use Bootstrap for styling
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'bootstrap_form'

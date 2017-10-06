@@ -4,42 +4,43 @@ class Users::SessionsController < Devise::SessionsController
 
   @@secret_key = Rails.application.config.jwt_secret_key
 
-  # GET /resource/sign_in
-  # def new
-  #   super
-  # end
-
   # POST /resource/sign_in
   def create
     if params.dig(:user, :email).present? && (params[:user][:email].exclude? "@")
       params[:user][:email] << "@sanger.ac.uk"
     end
+
     super
+
     set_session_cookie
+
     jwt = prepare_jwt_cookie({"email": params[:user][:email], "groups": current_user.groups})
-    cookies[:aker_user] = JWT.encode jwt, @@secret_key, 'HS256'
+    cookies[:aker_user_jwt] = JWT.encode jwt, @@secret_key, 'HS256'
   end
 
   # DELETE /resource/sign_out
   def destroy
     super
-    cookies.delete :aker_user
-    cookies.delete :aker_auth_session
+    cookies.delete :aker_user_jwt
   end
 
   def renew_jwt
     # TODO: Check session is valid
     # Renew JWT if so
-    # TODO: (and update expiry date on refresh token)
     # Otherwise, unauthorized error
-    user_data = JSON.parse(request.body.read)
 
-    unless user_data.empty?
-      jwt = prepare_jwt_cookie({email: user_data["email"], groups: user_data["groups"]})
+    data = JSON.parse(request.body.read)
+
+    # if session_id != Users.find_by(email: user_data["email"]).session_id
+    # session doesn't seem to exist here, which is obviously causing problems
+
+    if true
+      jwt = prepare_jwt_cookie({email: data['email'], groups: data['groups']})
       response = JWT.encode jwt, @@secret_key, 'HS256'
-      render json: response
+      render json: response, status: 200
     else
-      render body: "JWT from cookie has expired", status: :unauthorized
+      # User has been banned(or wasn't signed in to auth service depending on what state this code is in)
+      destroy
     end
   end
 
@@ -56,11 +57,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def set_session_cookie
-    # TODO: Encrypt this once its use is known
-    cookies[:aker_auth_session] = {
-      expires: 1.month.from_now,
-      value: JSON.generate({email: current_user.email, groups: current_user.groups})
-    }
+    session[:email] = current_user.email
+    session[:groups] = current_user.groups
   end
 
   protected
