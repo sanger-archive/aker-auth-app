@@ -29,13 +29,13 @@ class Users::SessionsController < Devise::SessionsController
     # Renew JWT if so
     # Otherwise, unauthorized error
 
-    data = JSON.parse(request.body.read)
+    email = request.body.read
 
     # if session_id != Users.find_by(email: user_data["email"]).session_id
     # session doesn't seem to exist here, which is obviously causing problems
 
     if true
-      jwt = prepare_jwt_cookie({email: data['email'], groups: User.find_by(email: data['email']).groups})
+      jwt = prepare_jwt_cookie({email: email, groups: User.find_by(email: email).groups})
       response = JWT.encode jwt, @@secret_key, 'HS256'
       render json: response, status: 200
     else
