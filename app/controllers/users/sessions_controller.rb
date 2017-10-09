@@ -22,6 +22,7 @@ class Users::SessionsController < Devise::SessionsController
   def destroy
     super
     cookies.delete :aker_user_jwt
+    session.destroy
   end
 
   def renew_jwt
@@ -29,15 +30,14 @@ class Users::SessionsController < Devise::SessionsController
     # Renew JWT if so
     # Otherwise, unauthorized error
 
-    email = request.body.read
-
     # if session_id != Users.find_by(email: user_data["email"]).session_id
     # session doesn't seem to exist here, which is obviously causing problems
 
-    if true
-      jwt = prepare_jwt_cookie({email: email, groups: User.find_by(email: email).groups})
-      response = JWT.encode jwt, @@secret_key, 'HS256'
-      render json: response, status: 200
+    if session[:email].present?
+      jwt = prepare_jwt_cookie({email: session[:email], groups: User.find_by(email: session[:email]).groups})
+      
+      cookies[:aker_user_jwt] = JWT.encode jwt, @@secret_key, 'HS256'
+      head :ok
     else
       # User has been banned(or wasn't signed in to auth service depending on what state this code is in)
       destroy
