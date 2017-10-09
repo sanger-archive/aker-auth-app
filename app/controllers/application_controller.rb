@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
       redirect_url
     else
-      "/"
+      "/dashboard"
     end
   end
 
