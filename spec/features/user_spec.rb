@@ -1,8 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :feature do
+  setup do
+    
+  end
+
   before do
-    @user = User.create!(email: "user@sanger.ac.uk", password: "password")
+    @user = User.create!(email: "user@sanger.ac.uk")
   end
 
   let :submit_form do
