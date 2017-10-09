@@ -32,6 +32,8 @@
       <a href="/login?redirect_url=http://www.google.jp"><button class="btn btn-info">Log in with redirect</button></a>
     <% end %>
     <h5>Auth Service Session <small>aker_auth_session</small></h5>
+    <%= cookies[:aker_auth_session] %>
+    <%= session %>
     <%= session.to_hash %>
   </p>
 </div>
