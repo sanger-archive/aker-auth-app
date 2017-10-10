@@ -8,6 +8,5 @@ class AddSessionsTable < ActiveRecord::Migration[5.1]
 
     add_index :sessions, :session_id, unique: true
     add_index :sessions, :created_at
-    add_index :sessions, :updated_at
   end
 end
