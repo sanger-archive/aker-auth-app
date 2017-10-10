@@ -46,8 +46,8 @@ private
 
   def prepare_jwt_cookie(auth_hash)
     iat = Time.now.to_i
-    exp = Time.now.to_i + Rails.application.config.jwt_exp_time
-    nbf = Time.now.to_i - Rails.application.config.jwt_nbf_time
+    exp = iat + Rails.application.config.jwt_exp_time
+    nbf = iat - Rails.application.config.jwt_nbf_time
     payload = { data: auth_hash, exp: exp, nbf: nbf, iat: iat }
   end
 
