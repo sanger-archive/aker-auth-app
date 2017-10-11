@@ -31,8 +31,9 @@ class Users::SessionsController < Devise::SessionsController
     if session[:email].present?
       jwt = prepare_jwt_cookie({email: session[:email], groups: User.find_by(email: session[:email]).groups})
       
-      cookies[:aker_user_jwt] = JWT.encode jwt, secret_key, 'HS256'
-      head :ok
+      coded_jwt = JWT.encode jwt, secret_key, 'HS256'
+      cookies[:aker_user_jwt] = coded_jwt
+      render body: coded_jwt, status: :ok
     else
       # User has been banned (or wasn't signed in to auth service depending on what state this code is in)
       destroy
