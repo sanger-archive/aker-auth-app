@@ -70,10 +70,9 @@ RSpec.describe Users::SessionsController, type: :controller do
         session[:email] = user.email
         post :renew_jwt
       end
-      it { expect(response).to have_http_status(:ok) }
-      it 'supplies a jwt cookie' do
-        expect(cookies[:aker_user_jwt]).to be_present
-        payload, header = decode(cookies[:aker_user_jwt])
+
+      def verify_jwt(coded_jwt)
+        payload, header = decode(coded_jwt)
         data = payload['data']
         expect(data).to eq({"email"=>user.email, "groups"=>["pirates", "world"]})
         now = Time.now.to_i
@@ -86,6 +85,17 @@ RSpec.describe Users::SessionsController, type: :controller do
         expect(exp).to eq(iat+Rails.application.config.jwt_exp_time)
         expect(nbf).to eq(iat-Rails.application.config.jwt_nbf_time)
         expect(header['alg']).to eq('HS256')
+      end
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it 'supplies a jwt cookie' do
+        expect(cookies[:aker_user_jwt]).to be_present
+        verify_jwt(cookies[:aker_user_jwt])
+      end
+      it 'returns the jwt in the body' do
+        expect(response.body).to be_present
+        verify_jwt(response.body)
       end
     end
 
