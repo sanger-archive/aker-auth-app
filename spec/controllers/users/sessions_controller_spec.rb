@@ -112,6 +112,8 @@ RSpec.describe Users::SessionsController, type: :controller do
       it 'destroys the session' do
         expect(session).to have_received(:destroy).at_least(:once)
       end
+
+      it { expect(response).to have_http_status(:unauthorized) }
     end
   end
 end

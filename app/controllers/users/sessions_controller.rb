@@ -12,7 +12,7 @@ class Users::SessionsController < Devise::SessionsController
 
     session[:email] = current_user.email
 
-    cookies[:aker_user_jwt] = make_jwt(email: params[:user][:email], groups: current_user.groups)
+    set_jwt_cookie(make_jwt(email: params[:user][:email], groups: current_user.groups))
   end
 
   # DELETE /resource/sign_out
@@ -29,11 +29,12 @@ class Users::SessionsController < Devise::SessionsController
 
     if session[:email].present?
       jwt = make_jwt(email: session[:email], groups: User.find_by(email: session[:email]).groups)
-      cookies[:aker_user_jwt] = jwt
+      set_jwt_cookie(jwt)
       render body: jwt, status: :ok
     else
-      # User has been banned (or wasn't signed in to auth service depending on what state this code is in)
+      # Session is not valid
       destroy
+      head :unauthorized
     end
   end
 
@@ -41,6 +42,10 @@ class Users::SessionsController < Devise::SessionsController
   end
 
 private
+
+  def set_jwt_cookie(jwt)
+    cookies[:aker_user_jwt] = jwt
+  end
 
   def make_jwt(data)
     iat = Time.now.to_i
