@@ -10,10 +10,9 @@ class Users::SessionsController < Devise::SessionsController
 
     super
 
-    set_session_cookie
+    session[:email] = current_user.email
 
-    jwt = prepare_jwt_cookie({"email": params[:user][:email], "groups": current_user.groups})
-    cookies[:aker_user_jwt] = JWT.encode jwt, secret_key, 'HS256'
+    cookies[:aker_user_jwt] = make_jwt(email: params[:user][:email], groups: current_user.groups)
   end
 
   # DELETE /resource/sign_out
@@ -29,11 +28,9 @@ class Users::SessionsController < Devise::SessionsController
     # Otherwise, unauthorized error
 
     if session[:email].present?
-      jwt = prepare_jwt_cookie({email: session[:email], groups: User.find_by(email: session[:email]).groups})
-      
-      coded_jwt = JWT.encode jwt, secret_key, 'HS256'
-      cookies[:aker_user_jwt] = coded_jwt
-      render body: coded_jwt, status: :ok
+      jwt = make_jwt(email: session[:email], groups: User.find_by(email: session[:email]).groups)
+      cookies[:aker_user_jwt] = jwt
+      render body: jwt, status: :ok
     else
       # User has been banned (or wasn't signed in to auth service depending on what state this code is in)
       destroy
@@ -45,19 +42,12 @@ class Users::SessionsController < Devise::SessionsController
 
 private
 
-  def prepare_jwt_cookie(auth_hash)
+  def make_jwt(data)
     iat = Time.now.to_i
     exp = iat + Rails.application.config.jwt_exp_time
     nbf = iat - Rails.application.config.jwt_nbf_time
-    payload = { data: auth_hash, exp: exp, nbf: nbf, iat: iat }
-  end
-
-  def set_session_cookie
-    session[:email] = current_user.email
-  end
-
-  def secret_key
-    Rails.application.config.jwt_secret_key
+    payload = { data: data, exp: exp, nbf: nbf, iat: iat }
+    JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
   end
 
   # If you have extra params to permit, append them to the sanitizer.
