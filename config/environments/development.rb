@@ -57,12 +57,10 @@ Rails.application.configure do
 
   config.fake_ldap = true
 
+  config.jwt_exp_time = 3600
+  config.jwt_nbf_time = 60
 
-  config.x.jwt = {
-    secret_key: "jumanji",
-    exp_time: 2 * 60,
-    nbf_time: 1 * 60
-  }
+  config.jwt_secret_key = 'development'
 
   config.middleware.insert_after(Warden::Manager, Aker::Proxy, {ssl_verify_none: true})
 end

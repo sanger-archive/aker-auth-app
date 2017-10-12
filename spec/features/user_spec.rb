@@ -2,17 +2,17 @@ require 'rails_helper'
 
 RSpec.describe User, type: :feature do
   before do
-    @user = User.create!(email: "user@sanger.ac.uk", password: "password")
+    @user = User.create!(email: "user@sanger.ac.uk")
   end
 
-  let :submit_form do
-    fill_in "user_email", with: "user@sanger.ac.uk"
+  def submit_form(email='user')
+    fill_in "user_email", with: email
     fill_in "user_password", with: "password"
     click_button "Log in"
   end
 
   describe "signing in" do
-     context "with a redirect URL present" do
+    context "with a redirect URL present" do
       it "redirects to the given URL" do
         visit "/login?redirect_url=https://www.google.de"
         submit_form
@@ -23,7 +23,7 @@ RSpec.describe User, type: :feature do
     context "without a redirect URL present" do
       it "redirects to the default URL" do
         visit "/login"
-        submit_form
+        submit_form('user@sanger.ac.uk')
         expect(current_path).to eq("/dashboard")
       end
     end

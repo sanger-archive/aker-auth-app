@@ -2,19 +2,55 @@
   <h1>Aker</h1>
 
   <% if notice %>
-    <p class="alert alert-info"><%= notice %></p>
+  <p class="alert alert-info"><%= notice %></p>
   <% elsif alert %>
-    <p class="alert alert-danger"><%= alert %></p>
+  <p class="alert alert-danger"><%= alert %></p>
   <% end %>
 
   <p>
     <% if user_signed_in? %>
-      Signed in as <%= current_user.email %> <br>
-      <%= button_to "Log out", "/logout", method: 'DELETE', class: "btn btn-danger" %>
-    <% else %>
-      Not signed in<br>
-      <a href="/login"><button class="btn btn-info">Log in</button></a>
-      <a href="/login?redirect_url=http://www.google.jp"><button class="btn btn-info">Log in with redirect</button></a>
+    Signed in as
+    <%= current_user.email %>
+    <br>
+    <%= button_to "Log out", "/logout", method: 'DELETE', class: "btn btn-danger" %>
+    <br>
+    <% if Rails.env.development? %>
+      <% begin %>
+      <h5>JWT from Shared Cookie
+        <small>aker_user</small>
+      </h5>
+      <% payload, header = JWT.decode cookies[:aker_user_jwt], Rails.configuration.jwt_secret_key, true, { algorithm: 'HS256'} %>
+      <%= payload %><br>
+      <h5>JWT Lfetime
+        <small>(seconds)</small>
+      </h5>
+      <%= "Lifetime: " + Rails.configuration.jwt_exp_time.to_s %><br>
+      <%= "Remaining: " + (Rails.configuration.jwt_exp_time - (Time.now.to_i - payload['iat'].to_i)).to_s %>
+      <% rescue JWT::VerificationError => e %>
+      JWT Verification failed
+      <% rescue JWT::ExpiredSignature => e %>
+      JWT has expired
+      <% rescue JWT::DecodeError => e%>
+      aker_user_jwt missing
+      <% end %>
     <% end %>
+  <% else %>
+    Not signed in<br>
+    <a href="/login">
+      <button class="btn btn-info">Log in</button>
+    </a>
+    <a href="/login?redirect_url=http://www.google.jp">
+      <button class="btn btn-info">Log in with redirect</button>
+    </a>
+    <% end %>
+    <% if Rails.env.development? %>
+      <h5>Auth Service Session
+        <small>aker_auth_session</small>
+      </h5>
+      <%= cookies[:aker_auth_session] %>
+      <%= session %>
+      <%= session.to_hash %>
+    <% end %>
+
   </p>
 </div>

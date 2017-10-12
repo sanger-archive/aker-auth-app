@@ -30,6 +30,9 @@ gem 'net-ldap'
 # JWTs to send on to the forward server
 gem 'jwt'
 
+# Store session details in database
+gem 'activerecord-session_store'
+
 # Use Bootstrap for styling
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'bootstrap_form'
@@ -46,6 +49,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'factory_girl_rails'
   gem 'rspec-rails', '~> 3.6'
 end
 
