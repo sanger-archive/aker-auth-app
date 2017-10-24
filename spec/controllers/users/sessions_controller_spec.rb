@@ -36,6 +36,15 @@ RSpec.describe Users::SessionsController, type: :controller do
         expect(session[:email]).to eq(username+ '@sanger.ac.uk')
       end
     end
+
+    context 'when the parameter contains uppercase characters' do
+      let(:email) { 'User@SaNgEr.ac.uk' }
+      it 'converts them to lowercase' do
+        post :create, params: { user: { email: email } }
+        jwt_email = (JWT.decode cookies[:aker_user_jwt], Rails.application.config.jwt_secret_key, 'HS256')[0]['data']['email']
+        expect(jwt_email).to eq(email.downcase)
+      end
+    end
   end
 
   describe '#destroy' do
