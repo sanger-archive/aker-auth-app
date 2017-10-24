@@ -4,8 +4,14 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
+    # Append domain if only the username is entered
     if params.dig(:user, :email).present? && (params[:user][:email].exclude? "@")
       params[:user][:email] << "@sanger.ac.uk"
+    end
+
+    # Convert email to lowercase to prevent multiple accounts with same email
+    if params.dig(:user, :email).present?
+      params[:user][:email].downcase!
     end
 
     super
