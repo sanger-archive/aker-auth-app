@@ -62,5 +62,4 @@ Rails.application.configure do
 
   config.jwt_secret_key = 'development'
 
-  config.middleware.insert_after(Warden::Manager, Aker::Proxy, {ssl_verify_none: true})
 end
