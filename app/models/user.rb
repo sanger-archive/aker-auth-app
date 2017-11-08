@@ -14,6 +14,15 @@ class User < ApplicationRecord
     @groups ||= fetch_groups
   end
 
+  def sanitise_email
+    if email
+      sanitised = email.strip.downcase
+      if sanitised != email
+        self.email = sanitised
+      end
+    end
+  end
+
 private
 
   def fetch_groups
@@ -25,15 +34,6 @@ private
       connection = Devise::LDAP::Adapter.ldap_connect(name)
       filter = Net::LDAP::Filter.eq("member", connection.dn)
       connection.ldap.search(filter: filter, base: Rails.application.config.ldap["group_base"]).collect(&:cn).flatten.push('world')
-    end
-  end
-
-  def sanitise_email
-    if email
-      sanitised = email.strip.downcase
-      if sanitised != email
-        self.email = sanitised
-      end
     end
   end
 end
