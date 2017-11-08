@@ -5,6 +5,11 @@ class User < ApplicationRecord
 
   attr_accessor :groups
 
+  validates :email, presence: true, uniqueness: true
+
+  before_validation :sanitise_email
+  before_save :sanitise_email
+
   def groups
     @groups ||= fetch_groups
   end
@@ -20,6 +25,15 @@ private
       connection = Devise::LDAP::Adapter.ldap_connect(name)
       filter = Net::LDAP::Filter.eq("member", connection.dn)
       connection.ldap.search(filter: filter, base: Rails.application.config.ldap["group_base"]).collect(&:cn).flatten.push('world')
+    end
+  end
+
+  def sanitise_email
+    if email
+      sanitised = email.strip.downcase
+      if sanitised != email
+        self.email = sanitised
+      end
     end
   end
 end
