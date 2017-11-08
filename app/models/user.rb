@@ -14,7 +14,7 @@ private
   def fetch_groups
     return ['pirates', 'world'] if Rails.configuration.fake_ldap
     # Cache groups to prevent unecessary LDAP requests
-    Rails.cache.fetch("#{email}/groups", expires_in: 12.hours) do
+    Rails.cache.fetch("#{cache_key}/groups", expires_in: 12.hours) do
       name = self.email
       DeviseLdapAuthenticatable::Logger.send("Getting groups for #{name}")
       connection = Devise::LDAP::Adapter.ldap_connect(name)
