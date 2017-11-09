@@ -5,8 +5,22 @@ class User < ApplicationRecord
 
   attr_accessor :groups
 
+  validates :email, presence: true, uniqueness: true
+
+  before_validation :sanitise_email
+  before_save :sanitise_email
+
   def groups
     @groups ||= fetch_groups
+  end
+
+  def sanitise_email
+    if email
+      sanitised = email.strip.downcase
+      if sanitised != email
+        self.email = sanitised
+      end
+    end
   end
 
 private
