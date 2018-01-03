@@ -57,6 +57,5 @@ Rails.application.configure do
 
   # Authentication Config
   config.fake_ldap = true
-  config.jwt_exp_time = 3600
   config.jwt_secret_key = 'development'
 end
