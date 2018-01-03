@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
+  JWT_NBF_TIME = 60
   let(:user) { create(:user) }
 
   before do
@@ -91,8 +92,8 @@ RSpec.describe Users::SessionsController, type: :controller do
         expect(exp).to be > now
         expect(nbf).to be < now
         expect(iat).to be_within(1).of(now)
-        expect(exp).to eq(iat+Rails.application.config.jwt_exp_time)
-        expect(nbf).to eq(iat-Rails.application.config.jwt_nbf_time)
+        expect(exp).to eq(iat + Rails.application.config.jwt_exp_time)
+        expect(nbf).to eq(iat - JWT_NBF_TIME)
         expect(header['alg']).to eq('HS256')
       end
 
