@@ -10,7 +10,6 @@ RSpec.describe Users::SessionsController, type: :controller do
 
   describe '#create' do
     context 'when the parameters include an email address' do
-
       let(:email) { 'user@sanger.ac.uk' }
       before do
         post :create, params: { user: { email: email } }
@@ -34,7 +33,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       end
 
       it 'should set the full email in the session' do
-        expect(session[:email]).to eq(username+ '@sanger.ac.uk')
+        expect(session[:email]).to eq(username + '@sanger.ac.uk')
       end
     end
 
@@ -118,7 +117,7 @@ RSpec.describe Users::SessionsController, type: :controller do
         session[:email] = nil
         post :renew_jwt
       end
-      
+
       it 'destroys the session' do
         expect(session).to have_received(:destroy).at_least(:once)
       end

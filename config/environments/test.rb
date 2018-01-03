@@ -40,10 +40,8 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # Authentication Config
   config.fake_ldap = true
-
   config.jwt_exp_time = 3600
-
   config.jwt_secret_key = 'test'
-
 end
