@@ -27,5 +27,7 @@ module AkerAuthService
 
     config.proxy = config_for :proxy
     config.ldap  = config_for :ldap
+
+    config.jwt_exp_time = 3600
   end
 end

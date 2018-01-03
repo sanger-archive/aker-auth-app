@@ -1,4 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
+  JWT_NBF_TIME = 60
+
   before_action :configure_sign_in_params, only: [:create]
   skip_before_action :verify_authenticity_token, only: [:renew_jwt, :destroy]
 
@@ -56,7 +58,7 @@ private
   def make_jwt(data)
     iat = Time.now.to_i
     exp = iat + Rails.application.config.jwt_exp_time
-    nbf = iat - Rails.application.config.jwt_nbf_time
+    nbf = iat - JWT_NBF_TIME
     payload = { data: data, exp: exp, nbf: nbf, iat: iat }
     JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
   end
