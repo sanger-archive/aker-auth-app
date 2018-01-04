@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
+  JWT_NBF_TIME = 60
   let(:user) { create(:user) }
 
   before do
@@ -9,7 +10,6 @@ RSpec.describe Users::SessionsController, type: :controller do
 
   describe '#create' do
     context 'when the parameters include an email address' do
-
       let(:email) { 'user@sanger.ac.uk' }
       before do
         post :create, params: { user: { email: email } }
@@ -33,7 +33,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       end
 
       it 'should set the full email in the session' do
-        expect(session[:email]).to eq(username+ '@sanger.ac.uk')
+        expect(session[:email]).to eq(username + '@sanger.ac.uk')
       end
     end
 
@@ -91,8 +91,8 @@ RSpec.describe Users::SessionsController, type: :controller do
         expect(exp).to be > now
         expect(nbf).to be < now
         expect(iat).to be_within(1).of(now)
-        expect(exp).to eq(iat+Rails.application.config.jwt_exp_time)
-        expect(nbf).to eq(iat-Rails.application.config.jwt_nbf_time)
+        expect(exp).to eq(iat + Rails.application.config.jwt_exp_time)
+        expect(nbf).to eq(iat - JWT_NBF_TIME)
         expect(header['alg']).to eq('HS256')
       end
 
@@ -117,7 +117,7 @@ RSpec.describe Users::SessionsController, type: :controller do
         session[:email] = nil
         post :renew_jwt
       end
-      
+
       it 'destroys the session' do
         expect(session).to have_received(:destroy).at_least(:once)
       end
