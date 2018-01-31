@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Use devise with LDAP for authentication
 gem 'devise'
-gem 'devise_ldap_authenticatable'
+gem 'devise_ldap_authenticatable', github: 'sanger/devise_ldap_authenticatable'
 gem 'net-ldap'
 
 # JWTs to send on to the forward server
