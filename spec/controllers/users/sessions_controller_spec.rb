@@ -20,7 +20,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       end
 
       it 'should return the jwt cookie' do
-        expect(response.headers['Set-Cookie']).to include('aker_user_jwt')
+        expect(response.headers['Set-Cookie']).to include("aker_jwt_#{Rails.env}")
       end
 
       it { expect(response).to have_http_status :found }
@@ -41,7 +41,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       let(:email) { 'User@SaNgEr.ac.uk' }
       it 'converts them to lowercase' do
         post :create, params: { user: { email: email } }
-        jwt_email = (JWT.decode cookies[:aker_user_jwt], Rails.application.config.jwt_secret_key, 'HS256')[0]['data']['email']
+        jwt_email = (JWT.decode cookies[:"aker_jwt_#{Rails.env}"], Rails.application.config.jwt_secret_key, 'HS256')[0]['data']['email']
         expect(jwt_email).to eq(email.downcase)
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe Users::SessionsController, type: :controller do
   describe '#destroy' do
     before do
       sign_in user
-      cookies[:aker_user_jwt] = 'something that is not nil'
+      cookies[:"aker_jwt_#{Rails.env}"] = 'something that is not nil'
       allow(controller).to receive(:cookies).and_return(cookies)
       allow(session).to receive(:destroy)
       delete :destroy
@@ -61,7 +61,7 @@ RSpec.describe Users::SessionsController, type: :controller do
     end
 
     it 'should delete the cookie' do
-      expect(cookies[:aker_user_jwt]).to be_nil
+      expect(cookies[:"aker_jwt_#{Rails.env}"]).to be_nil
     end
   end
 
@@ -99,8 +99,8 @@ RSpec.describe Users::SessionsController, type: :controller do
       it { expect(response).to have_http_status(:ok) }
 
       it 'supplies a jwt cookie' do
-        expect(cookies[:aker_user_jwt]).to be_present
-        verify_jwt(cookies[:aker_user_jwt])
+        expect(cookies[:"aker_jwt_#{Rails.env}"]).to be_present
+        verify_jwt(cookies[:"aker_jwt_#{Rails.env}"])
       end
       it 'returns the jwt in the body' do
         expect(response.body).to be_present
