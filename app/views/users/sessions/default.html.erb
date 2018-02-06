@@ -14,13 +14,12 @@
     <br>
     <%= button_to "Log out", "/logout", method: 'DELETE', class: "btn btn-danger" %>
     <br>
-    <h5>LDAP Gem Updated!</h5>
     <% if Rails.env.development? %>
       <% begin %>
       <h5>JWT from Shared Cookie
         <small>aker_user</small>
       </h5>
-      <% payload, header = JWT.decode cookies[:aker_user_jwt], Rails.configuration.jwt_secret_key, true, { algorithm: 'HS256'} %>
+      <% payload, header = JWT.decode cookies[:"aker_jwt_#{Rails.env}"], Rails.configuration.jwt_secret_key, true, { algorithm: 'HS256'} %>
       <%= payload %><br>
       <h5>JWT Lfetime
         <small>(seconds)</small>
@@ -32,7 +31,7 @@
       <% rescue JWT::ExpiredSignature => e %>
       JWT has expired
       <% rescue JWT::DecodeError => e%>
-      aker_user_jwt missing
+      <%= "aker_jwt_#{Rails.env} missing" %>
       <% end %>
     <% end %>
   <% else %>
@@ -46,9 +45,9 @@
     <% end %>
     <% if Rails.env.development? %>
       <h5>Auth Service Session
-        <small>aker_auth_session</small>
+        <small><%= "aker_auth_#{Rails.env}" %></small>
       </h5>
-      <%= cookies[:aker_auth_session] %>
+      <%= cookies[:"aker_auth_#{Rails.env}"] %>
       <%= session %>
       <%= session.to_hash %>
     <% end %>
