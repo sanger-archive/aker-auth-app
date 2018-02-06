@@ -26,7 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   # DELETE /resource/sign_out
   def destroy
     super
-    cookies.delete :aker_user_jwt
+    cookies.delete :"aker_jwt_#{Rails.env}"
     session.destroy
   end
 
@@ -52,7 +52,7 @@ class Users::SessionsController < Devise::SessionsController
 private
 
   def set_jwt_cookie(jwt)
-    cookies[:aker_user_jwt] = jwt
+    cookies[:"aker_jwt_#{Rails.env}"] = jwt
   end
 
   def make_jwt(data)
