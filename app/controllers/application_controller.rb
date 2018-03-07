@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   end
   protect_from_forgery with: :exception
 
+  before_action do
+    RequestStore.store[:request_id] = request.request_id
+  end
+
   helper_method :redirect_url
   def redirect_url
     if params[:redirect_url].present?
