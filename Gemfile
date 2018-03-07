@@ -41,6 +41,11 @@ gem 'launchy'
 
 gem 'jquery-rails'
 
+gem 'lograge'
+gem 'logstash-event'
+gem 'logstash-logger'
+gem 'request_store'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
