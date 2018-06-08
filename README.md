@@ -1,6 +1,8 @@
-# Aker Auth Service
+# Aker - Auth app
 
-This is a prototype Rails app to provide Single Sign-On for all Aker web-apps
+[![Build Status](https://travis-ci.org/sanger/aker-auth-app.svg?branch=devel)](https://travis-ci.org/sanger/aker-auth-app)
+
+This is Rails app provides Single Sign-On for all Aker web-apps
 
 Note: ldap.yml must be populated if this is to be used for accessing LDAP servers.
 Otherwise, enable fake_ldap in the appropriate environment config file.
