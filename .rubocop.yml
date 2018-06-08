@@ -14,7 +14,7 @@ Rails:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 99
+  Max: 100
 
 Style/BlockLength:
   Exclude:
