@@ -1,6 +1,8 @@
 # Aker - Auth app
 
 [![Build Status](https://travis-ci.org/sanger/aker-auth-app.svg?branch=devel)](https://travis-ci.org/sanger/aker-auth-app)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6f25335ed5bf756e9688/maintainability)](https://codeclimate.com/github/sanger/aker-auth-app/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6f25335ed5bf756e9688/test_coverage)](https://codeclimate.com/github/sanger/aker-auth-app/test_coverage)
 
 This is Rails app provides Single Sign-On for all Aker web-apps
 
