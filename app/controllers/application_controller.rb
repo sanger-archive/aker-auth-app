@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_unverified_request
-    flash[:danger] = "It seems you've opened another Aker tab, so your session
+    flash[:alert] = "It seems you've opened another Aker tab, so your session
     here has been ended for security reasons. You may now try again from this
     tab."
     redirect_to request.referer
