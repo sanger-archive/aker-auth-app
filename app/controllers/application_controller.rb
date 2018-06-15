@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     flash[:danger] = "It seems you've opened another Aker tab, so your session
     here has been ended for security reasons. You may now try again from this
     tab."
-    redirect_to :back
+    redirect_to request.referer
   end
 
 end
