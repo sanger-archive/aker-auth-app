@@ -33,4 +33,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def handle_unverified_request
+    flash[:alert] = "It seems you've opened another Aker window, or had this one
+    open for a long time, so your session has expired. Try again from this window."
+    redirect_to request.referer
+  end
+
 end
