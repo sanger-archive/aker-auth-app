@@ -27,6 +27,7 @@ gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.4'
 gem 'request_store'
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
+gem 'health_check'
 
 ###
 # Groups
