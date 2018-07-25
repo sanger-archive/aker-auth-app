@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  health_check_routes
+
   devise_scope :user do
     get 'login', to: 'users/sessions#new'
     delete 'logout', to: 'users/sessions#destroy'

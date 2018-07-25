@@ -1,0 +1,23 @@
+# https://rubocop.readthedocs.io/en/latest/configuration/
+
+AllCops:
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
+    - '**/Gemfile'
+  Exclude:
+    - 'db/**/*'
+    # - 'config/**/*'
+    # - 'script/**/*'
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Max: 100
+
+Style/BlockLength:
+  Exclude:
+    # - 'Rakefile'
+    # - '**/*.rake'
+    - 'spec/**/*.rb'
